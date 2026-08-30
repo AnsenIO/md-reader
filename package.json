@@ -1,0 +1,17 @@
+{
+  "name": "md-reader",
+  "version": "1.0.0",
+  "description": "Simple markdown reader for Android",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build step'",
+    "start": "echo 'No start step'"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/cli": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.0.0"
+  }
+}
