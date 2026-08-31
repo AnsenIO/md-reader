@@ -7,13 +7,14 @@ android {
   }
 }
 
-apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
+// cordova.variables.gradle removed: no Cordova plugins in use
+// apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
 
 
 }
 
-
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()
 }
+
