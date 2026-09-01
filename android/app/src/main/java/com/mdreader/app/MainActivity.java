@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.getcapacitor.BridgeActivity;
-import com.getcapacitor.Plugin;
-import com.getcapacitor.PluginManager;
 
 public class MainActivity extends BridgeActivity {
     private static final String TAG = "MainActivity";
@@ -18,12 +16,6 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // Register custom plugin
-        PluginManager pm = this.getBridge().getPluginManager();
-        MdReaderPlugin mdReaderPlugin = new MdReaderPlugin();
-        mdReaderPlugin.setBridge(this.getBridge());
-        pm.registerPlugin(mdReaderPlugin);
         
         // Handle incoming file intent
         handleIntent(getIntent());
