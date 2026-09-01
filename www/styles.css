@@ -53,6 +53,20 @@ body {
     background: #357abd;
 }
 
+.header-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-secondary {
+    background: #3a3a5e;
+    color: white;
+}
+
+.btn-secondary:active {
+    background: #2a2a4e;
+}
+
 .content-area {
     flex: 1;
     padding: 20px;
