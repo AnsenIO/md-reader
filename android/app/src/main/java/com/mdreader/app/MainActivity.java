@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.webkit.WebView;
 
 import com.getcapacitor.BridgeActivity;
 
@@ -57,13 +56,6 @@ public class MainActivity extends BridgeActivity {
                 prefs.edit().putString(KEY_FILE_URI, fileUri.toString()).apply();
                 
                 Log.d(TAG, "Stored pending file URI: " + fileUri.toString());
-                
-                // Reload the WebView with the file URI as a parameter
-                if (getWebViews() != null && !getWebViews().isEmpty()) {
-                    WebView webView = getWebViews().get(0);
-                    String url = "file:///android_asset/public/index.html?filePath=" + fileUri.toString();
-                    webView.loadUrl(url);
-                }
             }
         }
     }
