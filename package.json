@@ -8,11 +8,11 @@
     "start": "echo 'No start step'"
   },
   "dependencies": {
-    "@capacitor/core": "^6.0.0",
-    "@capacitor/cli": "^6.0.0",
-    "@capacitor/filesystem": "^6.0.0"
+    "@capacitor/cli": "^5.7.8",
+    "@capacitor/core": "^5.7.8",
+    "@capacitor/filesystem": "^5.2.2"
   },
   "devDependencies": {
-    "@capacitor/android": "^6.0.0"
+    "@capacitor/android": "^5.7.8"
   }
 }

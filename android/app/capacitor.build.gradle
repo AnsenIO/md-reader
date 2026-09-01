@@ -7,9 +7,10 @@ android {
   }
 }
 
+apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
-    implementation "androidx.core:core-splashscreen:1.0.1"
-    implementation project(':capacitor-android')
+    implementation project(':capacitor-filesystem')
+
 }
 
 
