@@ -29,6 +29,7 @@ Reaching destination = all four verified; ticket 05's verification is the gate.
 <!-- index: one line per closed ticket -->
 
 - [Root cause of ERR_CONNECTION_REFUSED](issues/01-root-cause-webview-loading.md) — Capacitor serves `assets/public/` over a local server; CI never ran `cap sync`, so the APK shipped with no `public/` dir and no config.
+- [Decide what "Browse" means](issues/04-decide-browse-semantics.md) — Andrea: directory navigator (list directories, descend/up), showing only `.md` files for now; shared-dir access first, permission question deferred to on-device verification.
 
 ## Not yet specified
 

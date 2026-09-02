@@ -1,9 +1,9 @@
 # Make the CI build reproducible (npm ci + cap sync before gradle)
 
-Status: open
+Status: claimed
 Type: task
 Blocked by: 01
-Assigned to: (unclaimed)
+Assigned to: Hermione
 
 ## Question
 
