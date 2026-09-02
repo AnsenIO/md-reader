@@ -29,27 +29,17 @@ Tracker = local-markdown (conventions in `.hermes/skills/engineering/setup-matt-
 
 Destination & fog: see `map.md`.
 
-## What was in flight when this handoff was written
+## What was in flight when this handoff was written (RESOLVED at push time)
 
-1. Local pre-verification of the CI fix: fresh `npx cap sync android` done (git status clean afterwards — good sign), then `./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx1536m"` running in background (host RAM is critical: ~121GB total, only ~5GB available; the 1.5G heap cap exists because of that).
-2. Planned CI change (ticket 02 mechanic A) — NOT yet written/pushed at handoff time:
-   ```yaml
-   - name: Install deps & sync web assets
-     run: npm ci && npx cap sync android
-   ```
-   inserted before the "Build debug APK" step in `.github/workflows/build.yml`. Fallback if `npm ci` fails on free tier (network/registry): skip npm entirely and just run `npx cap sync android` against the committed node_modules — it works locally, so it should work on CI.
-3. The cordova subproject is now fully tracked (`android/capacitor-cordova-android-plugins/*`) and **sync regenerates a consistent** `capacitor.build.gradle` + `settings.gradle` referencing it — earlier "manual patches" to those files were wrong-direction; the committed state as of HEAD `c34df14` is the baseline. Don't re-remove that directory unless you also remove the references in the two gradle files.
+1. Local pre-verification ran: fresh `npx cap sync android` → **git status clean afterwards** (generated files all consistent with tracked state). Then local `./gradlew assembleDebug` passed the full Gradle configure phase (app + capacitor-android + capacitor-cordova-android-plugins + capacitor-filesystem all resolved) and failed only at AAPT2 — expected: the aapt2 binary is x86_64-only and gx10 is aarch64. **CI is the real verifier.**
+2. CI change is written, committed as `32e6173` ("feat(ci): npm ci + cap sync before gradle (ticket 02)") and pushed — `.github/workflows/build.yml` now: checkout → JDK 17 → gradle setup (pinned 8.2.1) → **`npm ci && npx cap sync android`** → `test -f public/index.html …` hard check in `android/app/src/main/assets` → `./gradlew assembleDebug` → upload artifact. Fallback if `npm ci` fails on free tier (network/registry): drop the `npm ci &&`, keep `npx cap sync android` — node_modules is committed and sufficient.
+3. The cordova subproject is now fully tracked (`android/capacitor-cordova-android-plugins/*`) and **sync regenerates a consistent** `capacitor.build.gradle` + `settings.gradle` referencing it — earlier "manual patches" to those files were wrong-direction; the committed state at HEAD (≥ `c34df14`) is the baseline. Don't re-remove that directory unless you also remove the references in the two gradle files.
 
 ## Exact next steps (in order)
 
-1. Check the local build result: session output ends with `EXIT:<n>`. If 0, inspect `android/app/build/outputs/apk/debug/app-debug.apk`:
-   ```python
-   import zipfile; z = zipfile.ZipFile('android/app/build/outputs/apk/debug/app-debug.apk')
-   [print(n) for n in sorted(z.namelist()) if n.startswith('assets/')][:20]
-   ```
-   Must show `assets/public/index.html`, `assets/public/app.js`, `assets/public/styles.css`, `assets/capacitor.config.json`. If missing → the sync didn't land; re-check before CI.
-2. Push the workflow change (step 2 above), watch the run, then inspect the **downloaded** artifact's asset list the same way (ticket 02 acceptance).
-3. Resolve ticket 02: append Answer (mechanic chosen, commit sha, run id, APK asset listing) → `Status: resolved` → add one line to map's Decisions-so-far.
+1. Watch the CI run for `32e6173` (first one with the new workflow): `gh run watch <id>` in repo dir. If it fails at "Verify synced assets present" → sync didn't land (check npm ci output). If it fails later, read `--log-failed`.
+2. On green: download artifact (`rm -f /tmp/app-debug.apk` first), inspect asset list with zipfile — must show `assets/public/index.html`, `assets/public/app.js`, `assets/public/styles.css`, `assets/capacitor.config.json`.
+3. Resolve ticket 02: append Answer (mechanic chosen, commit sha, run id, APK asset listing) → `Status: resolved` → add one line to map's Decisions-so-far. Commit ticket edits with the work.
 4. **Ticket 03** (.md association): the URI from a file manager is stored in SharedPreferences (`md_reader_prefs/pending_file_uri`) but never read. Implement transport (recommended: MainActivity appends `?filePath=<uri>` and reloads, OR Capacitor App-plugin event), plus native ContentResolver read for `content://` URIs (WebView can't fetch them). HITL gate: Andrea taps a real .md in Samsung Files on the Z Fold 5.
    - Also implement the Browse navigator decided in ticket 04: descend/ascend directories, list `.md` files only, open on tap. Capacitor `Files.readdir({path})` with shared-dir paths; root = `/downloads`.
    - One APK per verified fix — do not ship 03 and 04 separately if they land together (save a round-trip of Andrea installing).
