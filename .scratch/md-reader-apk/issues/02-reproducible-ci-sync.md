@@ -1,6 +1,6 @@
 # Make the CI build reproducible (npm ci + cap sync before gradle)
 
-Status: claimed
+Status: resolved
 Type: task
 Blocked by: 01
 Assigned to: Hermione
@@ -18,3 +18,16 @@ Acceptance for this ticket (evidence, not vibes):
 3. Downloaded APK inspected with `zipfile` shows `assets/public/index.html`, `assets/public/app.js`, `assets/public/styles.css`, and `assets/capacitor.config.json`.
 
 Record in Answer: which mechanic, commit sha, run id, asset listing from the APK.
+
+## Answer
+
+**Mechanic chosen: A — sync in CI.** `.github/workflows/build.yml` now runs `npm ci && npx cap sync android`, then a hard-fail check that the synced assets exist (`test -f public/index.html && … capacitor.config.json`) before gradle. Rationale over B (commit generated assets): single source of truth stays `www/`; no risk of forgetting to re-sync; cost is ~1–2 min of npm time on free tier — acceptable.
+
+**Evidence:**
+- Commit: `32e6173` ("feat(ci): npm ci + cap sync before gradle (ticket 02)")
+- CI run: #33612527742, green (also rebuilt cleanly at handoff commit `c30a115`)
+- Local pre-check: fresh `npx cap sync android` left git status clean (generated files consistent with tracked state); local gradle passed the full configure phase and failed only at AAPT2 (x86_64 binary on aarch64 host — expected, CI is the real packaging verifier)
+- Shipped APK asset listing (run #33612527742 artifact): `assets/public/{index.html,app.js,styles.css,cordova.js,cordova_plugins.js}`, `assets/capacitor.config.json`, `assets/capacitor.plugins.json`, `assets/native-bridge.js` — **all required assets present** (previously: only `www/*`)
+- Note for later cleanup: `assets/www/*` is still in the APK because it's committed under a dir that isn't gitignored; harmless duplication, but ticket 05 can drop it from tracking once public/ is proven.
+
+Acceptance criteria met: green on free tier ✓, artifact inspected ✓, web root + config present ✓.
