@@ -1,9 +1,9 @@
 # Final on-device verification + APK delivery
 
-Status: open
+Status: claimed
 Type: task
 Blocked by: 03, 04
-Assigned to: (unclaimed)
+Assigned to: Hermione (claimed 2026-09-02 — APK built, awaiting on-device checklist)
 
 ## Question
 

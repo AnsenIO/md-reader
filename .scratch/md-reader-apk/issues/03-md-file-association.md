@@ -45,7 +45,7 @@ Record in Answer: mechanism chosen, commit sha, run id, evidence of successful o
 
 **Verification (artifact level):** javac of all app + Capacitor core sources green with local JDK 17 / android-34 (`bash .scratch/check-compile.sh`); `npx cap sync android` → git status clean for generated files; CI asset check now includes marked.min.js. On-device verification = ticket 05 (HITL gate).
 
-**Commit/run:** see map Decisions-so-far pointer (commit sha + green run id recorded there at resolution time).
+**Commit/run:** commit `4908036` (pushed to master), CI run **#33706607209 green**. Artifact verified post-download: APK contains `assets/public/{index,app,styles}.js/html/css + marked.min.js` (sha matches repo) + `capacitor.config.json`; DEX contains `com/mdreader/app/FileOpenPlugin` + `MainActivity`; binary manifest has VIEW/SEND filters with text/* + .md patterns and the http(s) filter pruned. On-device verification = ticket 05 (HITL gate).
 
 ## Comments
 
