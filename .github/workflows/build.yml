@@ -31,7 +31,7 @@ jobs:
 
       - name: Verify synced assets present
         working-directory: android/app/src/main/assets
-        run: test -f public/index.html && test -f public/app.js && test -f public/styles.css && test -f capacitor.config.json
+        run: test -f public/index.html && test -f public/app.js && test -f public/styles.css && test -f public/marked.min.js && test -f capacitor.config.json
 
       - name: Build debug APK
         working-directory: android

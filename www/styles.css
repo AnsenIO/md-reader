@@ -180,6 +180,80 @@ body {
     font-size: 1.1rem;
 }
 
+/* Browse navigator (ticket 04) */
+.nav-bar {
+    background: #1a1a2e;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    color: #fff;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    background: #1a1a2e;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.file-item:active {
+    background: #26264a;
+}
+
+.file-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.file-info {
+    min-width: 0;
+}
+
+.file-name {
+    color: #e8e8f0;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+}
+
+.file-size {
+    color: #777;
+    font-size: 0.78rem;
+    margin-top: 2px;
+}
+
+.nav-hint {
+    text-align: center;
+    color: #666;
+    font-size: 0.85rem;
+    margin-top: 14px;
+}
+
+.empty-state.small {
+    height: auto;
+    padding: 32px 16px;
+}
+
+/* Error state (open/browse failures) */
+.error-state {
+    color: #ff9f9f;
+    text-align: left;
+    line-height: 1.5;
+}
+
+.error-state .err-detail {
+    margin-top: 8px;
+    color: #999;
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+}
+
 /* Samsung Z Fold 5 specific optimizations */
 @media (min-width: 700px) {
     .content-area {

@@ -22,51 +22,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Open .md files from file manager -->
+            <!-- Open .md/.markdown tapped in a file manager.
+                 Multiple <data pathPattern> are OR'd; scheme+mimeType+pattern are AND'd, so this
+                 matches only text/* md/markdown URIs — no false positives on other files. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Handle file:// URIs -->
                 <data android:scheme="file" />
                 <data android:mimeType="text/*" />
-                <data android:pathPattern=".*\\.md" />
-                <data android:pathPattern=".*\\.MD" />
-                <data android:pathPattern=".*\\.markdown" />
-                <data android:pathPattern=".*\\.MARKDOWN" />
-                <data android:pathPattern=".*\\.txt" />
-                <data android:pathPattern=".*\\.TXT" />
+                <data android:pathPattern=".*\.md" />
+                <data android:pathPattern=".*\.MD" />
+                <data android:pathPattern=".*\.markdown" />
+                <data android:pathPattern=".*\.MARKDOWN" />
             </intent-filter>
-            
-            <!-- Handle content:// URIs (file sharing) -->
+
+            <!-- content:// URIs from SAF (Samsung Files on Android 13+ hands these out).
+                 No BROWSABLE here — file managers don't need a browser fallback for this. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="content" />
                 <data android:mimeType="text/*" />
-                <data android:pathPattern=".*\\.md" />
-                <data android:pathPattern=".*\\.MD" />
-                <data android:pathPattern=".*\\.markdown" />
-                <data android:pathPattern=".*\\.MARKDOWN" />
-                <data android:pathPattern=".*\\.txt" />
-                <data android:pathPattern=".*\\.TXT" />
+                <data android:pathPattern=".*\.md" />
+                <data android:pathPattern=".*\.MD" />
+                <data android:pathPattern=".*\.markdown" />
+                <data android:pathPattern=".*\.MARKDOWN" />
             </intent-filter>
-            
-            <!-- Handle http/https URIs -->
+
+            <!-- "Share to MD Reader": apps that export EXTRA_STREAM with a text/* md file. -->
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:host="*" />
-                <data android:pathPattern=".*\\.md" />
-                <data android:pathPattern=".*\\.MD" />
-                <data android:pathPattern=".*\\.markdown" />
-                <data android:pathPattern=".*\\.MARKDOWN" />
-                <data android:pathPattern=".*\\.txt" />
-                <data android:pathPattern=".*\\.TXT" />
+                <data android:mimeType="text/*" />
             </intent-filter>
 
         </activity>
@@ -82,10 +69,8 @@
         </provider>
     </application>
 
-    <!-- Permissions -->
+    <!-- INTERNET: Capacitor localhost bridge + future web links. -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Shared storage reads for the Browse navigator on API ≤ 32 (scoped-storage legacy). -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <!-- For Android 13+ storage access -->
-    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 </manifest>

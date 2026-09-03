@@ -31,6 +31,7 @@ Reaching destination = all four verified; ticket 05's verification is the gate.
 - [Root cause of ERR_CONNECTION_REFUSED](issues/01-root-cause-webview-loading.md) — Capacitor serves `assets/public/` over a local server; CI never ran `cap sync`, so the APK shipped with no `public/` dir and no config.
 - [Make the CI build reproducible](issues/02-reproducible-ci-sync.md) — mechanic A: `npm ci && npx cap sync android` + hard asset check in CI (commit 32e6173, run #33612527742 green; shipped APK now contains assets/public + config).
 - [Decide what "Browse" means](issues/04-decide-browse-semantics.md) — Andrea: directory navigator (list directories, descend/up), showing only `.md` files for now; shared-dir access first, permission question deferred to on-device verification.
+- [Open .md files tapped in a file manager](issues/03-md-file-association.md) — app-local `FileOpen` plugin: retained native event (`filePending`, survives intent-before-JS race) + SharedPreferences safety net + ContentResolver reads for content://; manifest pruned to file+content VIEW (md/markdown) and SEND text/*, http(s)/BROWSABLE dropped. Also found the silent-Browse root cause (v5.2.2 has no DOWNLOADS dir ID → navigator uses absolute `/storage/emulated/0/Download`) and vendored marked locally. On-device confirmation rides in ticket 05.
 
 ## Not yet specified
 
@@ -38,7 +39,6 @@ Reaching destination = all four verified; ticket 05's verification is the gate.
 
 - **Release build / Play Store distribution** — debug APK is fine for the destination; signing + AAB only matters after the app works on-device.
 - **Theme/font/content-settings** (font size, line width) — nice-to-have reader UX; revisit once core open/browse flows are locked.
-- **What "browse" means across storage scopes** — SAF vs direct Downloads access depends on ticket 03's decision and Android 11+ scoped-storage rules; graduate after 03 resolves.
 
 ## Out of scope
 
