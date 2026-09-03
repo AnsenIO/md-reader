@@ -26,6 +26,22 @@ Acceptance:
 
 Record in Answer: commit sha(s), AAB size + versionCode/versionName, keystore location (name only, mask password), listing text as published, privacy policy URL, tester link / track name, per-acceptance evidence.
 
+## Progress (Hermione, 2026-09-03)
+
+Build side done — commit efd53a3, CI run #33771325412 green:
+- targetSdk 34→36, compileSdk 34→36 (android/build.gradle via AGP 8.9.2, Gradle 8.13, SDK platform android-36 installed in CI)
+- Release signing: keystore committed (android/keystores/squadshelf-release.keystore, alias squadshelf, SHA-256 fp 2B:C3:60:42:F0:3B:...), password env-overridable via KEYSTORE_PASS
+- strings.xml renamed to SquadShelf (app_name + title_activity_main); package id kept com.mdreader.app (rename before first publish is allowed but the app's whole identity chain — FileProvider authority, prefs, intent filter association — already matches; renaming adds risk for zero user value at v0.1)
+- versionName 0.1-beta, versionCode 2
+- Edge-to-edge (forced at target 35+): MainActivity pads the content view with system-window insets
+- AAB verified post-build: manifest has VIEW×2 + SEND filters, legacy storage perm, no http(s) scheme; SquadShelf label in resources.pb; signature entries META-INF/SQUADSHE.*; all web assets including vendored marked.min.js
+
+Store assets in .scratch/play/: icon_512.png, feature_graphic_1024x500.png, screenshots (reader + browse, phone 1080x2340, dark theme), listing.md (title/desc/category), upload_to_play.py (publisher-API internal-track upload; needs service-account JSON).
+
+Privacy policy live: https://ansenio.github.io/md-reader/privacy-policy.html (200 OK, 2133B, GH Pages from docs/).
+
+REMAINING (Andrea's step): create the Play Console app entry + a service-account JSON (Play Console → Setup → API access → create SA, download JSON, hand it to me) OR do the first upload himself in the console (upload .scratch/.. artifact, paste listing text, upload assets). Internal track only; app details page gets the listing from listing.md.
+
 ## Comments
 
 - Created 2026-09-03 by Hermione from Andrea's Telegram directive: "Approved for v0.1 beta testing. Let's publish it to Google playstore under the name of squadshelf".
