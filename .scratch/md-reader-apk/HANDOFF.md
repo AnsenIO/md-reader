@@ -35,24 +35,22 @@ Destination & fog: see `map.md`.
 2. CI change is written, committed as `32e6173` ("feat(ci): npm ci + cap sync before gradle (ticket 02)") and pushed — `.github/workflows/build.yml` now: checkout → JDK 17 → gradle setup (pinned 8.2.1) → **`npm ci && npx cap sync android`** → `test -f public/index.html …` hard check in `android/app/src/main/assets` → `./gradlew assembleDebug` → upload artifact. Fallback if `npm ci` fails on free tier (network/registry): drop the `npm ci &&`, keep `npx cap sync android` — node_modules is committed and sufficient.
 3. The cordova subproject is now fully tracked (`android/capacitor-cordova-android-plugins/*`) and **sync regenerates a consistent** `capacitor.build.gradle` + `settings.gradle` referencing it — earlier "manual patches" to those files were wrong-direction; the committed state at HEAD (≥ `c34df14`) is the baseline. Don't re-remove that directory unless you also remove the references in the two gradle files.
 
-## Status at handoff (post-push, verified)
+## Status (updated 2026-09-02, ticket 03 resolved)
 
-- **Ticket 02: RESOLVED.** CI run #33612527742 green; shipped APK inspected — `assets/public/{index.html,app.js,styles.css}` + `capacitor.config.json` all present. The launch bug is fixed at artifact level (on-device confirmation still rides in ticket 05).
+- **Ticket 02: RESOLVED** — CI run #33612527742 green; shipped APK inspected — `assets/public/{index.html,app.js,styles.css}` + `capacitor.config.json` all present.
 - **Ticket 04: RESOLVED** (Andrea's decision recorded in the ticket: directory navigator, `.md` only).
-- **Remaining work = tickets 03 + 05.** Implement .md association end-to-end AND the Browse navigator (per ticket 04's spec) — ideally one commit/APK since both are web+native changes in the same app; then run ticket 05's verification checklist with Andrea on-device and deliver.
-- HEAD at handoff: `d293a95` (map/ticket bookkeeping only). A CI run for it may still be finishing — expected green, no code change.
+- **Ticket 03: RESOLVED (2026-09-02)** — commit `4908036`: app-local `FileOpen` plugin (retained-event transport + SharedPreferences safety net + ContentResolver reads), Browse navigator implemented per ticket 04's spec, marked vendored locally. Full design rationale in the ticket's Answer. Bonus root cause found there: v5.2.2 `FilesystemPlugin.getDirectory()` has no "DOWNLOADS" case — the old `/downloads` shorthand silently threw, which is why Browse never worked; navigator now uses absolute `/storage/emulated/0/Download`.
+- **Remaining work = ticket 05 only.** On-device checklist with Andrea (fresh install / tap .md in Samsung Files / browse / fallback), record evidence, close. One APK for all of it — the `4908036` build is THE deliverable; do not ship separate builds per feature.
 
-## Known risk to fold into the next commit (one-liner)
+## Known risk (RESOLVED in `4908036`)
 
-`www/index.html` loads **marked from a CDN** (`cdn.jsdelivr.net/npm/marked/marked.min.js`). No network at launch → UI shows but rendering throws "marked is not defined". Fix: download `marked.min.js` into `www/`, change the `<script src>` to local. Cheap insurance before shipping ticket 05's APK.
+`www/index.html` loaded **marked from a CDN** (`cdn.jsdelivr.net/npm/marked/marked.min.js`). No network at launch → UI shows but rendering throws "marked is not defined". Fixed: `marked@12.0.2` vendored to `www/marked.min.js`, script tag now local; CI asset check verifies it ships in the APK.
 
 ## Exact next steps (in order)
 
 1. ~~Watch CI for `32e6173`~~ done: run #33612527742 green, asset listing verified (see ticket 02 Answer).
-2. Implement ticket 03 + the ticket-04 Browse navigator (+ local marked.js) in one commit; push; watch CI (`gh run list --workflow=build.yml`); on green inspect artifact assets again.
-   - Ticket 03 detail: the URI from a file manager is stored in SharedPreferences (`md_reader_prefs/pending_file_uri`) but never read. Implement transport (recommended: MainActivity appends `?filePath=<uri>` and reloads, OR Capacitor App-plugin event), plus native ContentResolver read for `content://` URIs (WebView can't fetch them). HITL gate: Andrea taps a real .md in Samsung Files on the Z Fold 5.
-   - Browse navigator per ticket 04's spec: descend/ascend directories, list `.md` files only, open on tap; Capacitor `Files.readdir({path})`, root = `/downloads`.
-3. Deliver APK to Telegram, have Andrea run ticket 05's checklist (fresh install → launch / tap .md in Samsung Files / browse), record per-check evidence, close tickets as they pass. One APK for all of it — do not ship separate builds per feature (save round-trips of Andrea installing).
+2. ~~Implement ticket 03 + the ticket-04 Browse navigator (+ local marked.js) in one commit~~ done: `4908036` (CI run for it is the deliverable build; inspect its artifact assets before delivery — public/{index,app,styles,marked.min.js} + capacitor.config.json must all be present).
+3. Deliver that APK to Telegram, have Andrea run ticket 05's checklist (fresh install → launch / tap .md in Samsung Files / browse), record per-check evidence, close tickets as they pass. One APK for all of it — do not ship separate builds per feature (save round-trips of Andrea installing).
 
 ## Pitfalls learned (the hard way)
 
