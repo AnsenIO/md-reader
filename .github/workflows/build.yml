@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android APK + AAB
 
 on:
   push:
@@ -8,24 +8,31 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup JDK 17
+      - name: Setup JDK 17 (AGP 8.9 minimum)
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.2.1
+      # compileSdk 36 needs a platform the runner image doesn't ship — install it explicitly.
+      # build-tools pinned to 35.0.0 in android/build.gradle (all modules).
+      - name: Install Android SDK platform + build-tools
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-36" "build-tools;35.0.0" "platform-tools" || true
+          ls "$ANDROID_HOME/platforms/"
 
       # node_modules is committed, but npm ci keeps it in lockstep with package-lock.json;
       # cap sync regenerates assets/public + capacitor configs from www/ — without it the
-      # APK ships an empty web root and the WebView hits ERR_CONNECTION_REFUSED (see .scratch map ticket 02).
+      # APK ships an empty web root and the WebView hits ERR_CONNECTION_REFUSED (see ticket 02).
       - name: Install deps & sync Capacitor assets
         run: npm ci && npx cap sync android
 
@@ -33,12 +40,20 @@ jobs:
         working-directory: android/app/src/main/assets
         run: test -f public/index.html && test -f public/app.js && test -f public/styles.css && test -f public/marked.min.js && test -f capacitor.config.json
 
-      - name: Build debug APK
+      # Gradle 8.13 via the wrapper (AGP 8.9.2 requirement). Free-tier runner: keep heap modest,
+      # no daemon needed for a single build.
+      - name: Build debug APK + release AAB
         working-directory: android
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug bundleRelease --no-daemon
 
-      - name: Upload APK
+      - name: Upload debug APK (side-load / beta testing)
         uses: actions/upload-artifact@v4
         with:
           name: md-reader-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload release AAB (Google Play — ticket 06)
+        uses: actions/upload-artifact@v4
+        with:
+          name: squadshelf-release-aab
+          path: android/app/build/outputs/bundle/release/app-release.aab

@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.1'
+        classpath 'com.android.tools.build:gradle:8.9.2'
         classpath 'com.google.gms:google-services:4.4.0'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -22,6 +22,17 @@ allprojects {
         google()
         mavenCentral()
     }
+}
+
+// Pin build-tools for every module (app + capacitor libs) so CI, which installs exactly this
+// version via sdkmanager, never resolves a missing "latest". withId fires at plugin-apply time.
+subprojects { sub ->
+    def pinTools = {
+        def androidExt = sub.extensions.findByName('android')
+        if (androidExt != null) androidExt.buildToolsVersion = '35.0.0'
+    }
+    sub.plugins.withId('com.android.application') { pinTools() }
+    sub.plugins.withId('com.android.library') { pinTools() }
 }
 
 task clean(type: Delete) {

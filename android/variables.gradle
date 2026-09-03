@@ -1,7 +1,8 @@
 ext {
+    // Play requirement (2026-09): new apps must target API 36+ (Android 16). compileSdk 36 needs AGP >= 8.9.1 (see android/build.gradle + wrapper).
     minSdkVersion = 22
-    compileSdkVersion = 34
-    targetSdkVersion = 34
+    compileSdkVersion = 36
+    targetSdkVersion = 36
     androidxActivityVersion = '1.8.0'
     androidxAppCompatVersion = '1.6.1'
     androidxCoordinatorLayoutVersion = '1.2.0'

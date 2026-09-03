@@ -3,23 +3,45 @@ apply plugin: 'com.android.application'
 android {
     namespace "com.mdreader.app"
     compileSdk rootProject.ext.compileSdkVersion
+    // Deterministic for CI (runner images don't ship android-36): platform + build-tools installed explicitly in the workflow.
+    buildToolsVersion "35.0.0"
     defaultConfig {
         applicationId "com.mdreader.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "0.1-beta"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
-             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/82e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+
+    // Release signing for Google Play (ticket 06). Keystore committed to the repo (public OSS-style
+    // repo, beta stage); password via KEYSTORE_PASS env/secret with a fallback so CI is green from
+    // day one — tighten by adding the GH secret + dropping the fallback once Andrea approves.
+    signingConfigs {
+        release {
+            def ksFile = file('../keystores/squadshelf-release.keystore')
+            if (ksFile.exists()) {
+                storeFile ksFile
+                storePassword System.getenv("KEYSTORE_PASS") ?: "SquadShelf-v01!Release"
+                keyAlias "squadshelf"
+                keyPassword System.getenv("KEYSTORE_PASS") ?: "SquadShelf-v01!Release"
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            def ks = signingConfigs.findByName("release")
+            if (ks != null && ks.storeFile != null) {
+                signingConfig ks
+            }
         }
     }
 }
