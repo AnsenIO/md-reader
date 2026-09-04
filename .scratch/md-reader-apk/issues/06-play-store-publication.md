@@ -1,6 +1,6 @@
 # Publish to Google Play as "SquadShelf" (v0.1 beta)
 
-Status: claimed
+Status: resolved
 Type: task
 Blocked by: (none — successor ticket after map completion; Andrea's directive 2026-09-03)
 Assigned to: Hermione (claimed 2026-09-03)
