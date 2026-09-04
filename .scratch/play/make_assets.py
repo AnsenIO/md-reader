@@ -69,8 +69,15 @@ bg = gradient(W, h=H)
 d = ImageDraw.Draw(bg)
 d.rounded_rectangle([48, 96, 58, H - 96], radius=5, fill=(74, 144, 217))
 f_title = ImageFont.truetype(font_path, 108)
-f_sub = ImageFont.truetype(font_path, 44)
 d.text((96, 130), "SquadShelf", font=f_title, fill=(255, 255, 255))
-d.text((98, 290), "Read Markdown. Anywhere on Android.", font=f_sub, fill=(170, 180, 215))
+# fit subheadline within the graphic with margin
+sub = "Read Markdown. Anywhere on Android."
+f_sub = ImageFont.truetype(font_path, 22)  # fallback; loop below refines upward
+for sz in range(44, 20, -2):
+    f_sub = ImageFont.truetype(font_path, sz)
+    bb = d.textbbox((0, 0), sub, font=f_sub)
+    if 98 + (bb[2] - bb[0]) <= W - 48:
+        break
+d.text((98, 290), sub, font=f_sub, fill=(170, 180, 215))
 bg.save(os.path.join(OUT, "feature_graphic_1024x500.png"))
 print("feature graphic saved:", bg.size)

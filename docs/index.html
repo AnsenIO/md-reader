@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SquadShelf — Your Markdown, on your device</title>
+    <meta name="description" content="SquadShelf is a local-first Markdown reader for Android. Opens .md files from any file manager. Offline, private, no account.">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <style>
+        :root {
+            --bg: #0f0f1a;
+            --bg-soft: #181828;
+            --accent: #4a90d9;
+            --accent-soft: #6aa8e8;
+            --text: #e8e8f0;
+            --text-dim: #9a9ab0;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg); color: var(--text);
+            margin: 0; line-height: 1.6;
+        }
+        .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+        header {
+            display: flex; align-items: center; gap: 16px;
+            padding: 40px 0 8px;
+        }
+        header img { width: 64px; height: 64px; border-radius: 14px; }
+        header h1 { font-size: 1.8rem; margin: 0; }
+        header .tagline { color: var(--text-dim); margin: 0; }
+        .hero {
+            background: var(--bg-soft); border-radius: 16px;
+            padding: 32px; margin: 32px 0; text-align: center;
+        }
+        .hero img { max-width: 100%; border-radius: 10px; }
+        .cta {
+            display: inline-block; background: var(--accent); color: #fff;
+            padding: 14px 28px; border-radius: 10px; text-decoration: none;
+            font-weight: 600; margin-top: 20px;
+        }
+        .cta.soon { background: var(--bg); border: 1px solid var(--accent); color: var(--accent-soft); }
+        .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 32px 0; }
+        @media (max-width: 560px) { .features { grid-template-columns: 1fr; } }
+        .feature { background: var(--bg-soft); border-radius: 12px; padding: 20px; }
+        .feature h3 { margin: 0 0 8px; color: var(--accent-soft); font-size: 1rem; }
+        .feature p { margin: 0; color: var(--text-dim); font-size: 0.92rem; }
+        .shots { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin: 32px 0; }
+        .shots img { width: 240px; border-radius: 18px; border: 1px solid #2a2a40; }
+        footer {
+            border-top: 1px solid #2a2a40; margin-top: 48px;
+            padding: 24px 0 48px; color: var(--text-dim); font-size: 0.9rem;
+        }
+        footer a { color: var(--accent-soft); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .aliases { margin-top: 8px; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            <img src="assets/icon.png" alt="SquadShelf icon">
+            <div>
+                <h1>SquadShelf</h1>
+                <p class="tagline">Your Markdown, on your device.</p>
+            </div>
+        </header>
+
+        <div class="hero">
+            <img src="assets/feature-graphic.png" alt="SquadShelf feature graphic">
+            <br>
+            <a class="cta soon" href="https://github.com/AnsenIO/md-reader">Google Play — beta, coming shortly</a>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h3>Opens from anywhere</h3>
+                <p>Tap a <code>.md</code> file in any file manager — SquadShelf opens it, rendered and readable.</p>
+            </div>
+            <div class="feature">
+                <h3>Private by design</h3>
+                <p>No analytics, no account, no servers. Your files never leave the device. See the <a href="privacy-policy.html" style="color: var(--accent-soft)">privacy policy</a>.</p>
+            </div>
+            <div class="feature">
+                <h3>Offline-first</h3>
+                <p>Rendering engine is bundled in the app. Works on a plane, in a tunnel, anywhere.</p>
+            </div>
+            <div class="feature">
+                <h3>Built to grow</h3>
+                <p>v0.1 is the foundation. The SquadShelf squad of tools ships on the same platform.</p>
+            </div>
+        </div>
+
+        <div class="shots">
+            <img src="assets/screenshot-reader.png" alt="SquadShelf reader view">
+            <img src="assets/screenshot-browse.png" alt="SquadShelf file browser">
+        </div>
+
+        <footer>
+            <p>SquadShelf is built by <a href="https://iab.ai">IABAI SaS</a> ·
+               <a href="https://github.com/AnsenIO/md-reader">Source on GitHub</a> ·
+               <a href="privacy-policy.html">Privacy policy</a></p>
+            <p class="aliases">
+                <a href="mailto:support@squadshelf.com">support@squadshelf.com</a> ·
+                <a href="mailto:sales@squadshelf.com">sales</a> ·
+                <a href="mailto:invest@squadshelf.com">invest</a> ·
+                <a href="mailto:info@squadshelf.com">info</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
