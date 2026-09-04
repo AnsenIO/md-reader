@@ -3,6 +3,9 @@
 ## App name
 SquadShelf
 
+## Store-listing contact email (Play Console "Store settings")
+support@squadshelf.com
+
 ## Short description (≤80 chars)
 Read Markdown files anywhere — offline, private, no account needed.
 
