@@ -44,4 +44,6 @@ REMAINING (Andrea's step): create the Play Console app entry + a service-account
 
 ## Comments
 
+- 2026-09-04: SHIPPED TO PLAY (draft). Package renamed com.mdreader.app → com.squadmdreader.app to match Andrea's console-created app record (commit 7abd98c, CI #33869435158 green). SA (squadshelf@squadshelf.iam.gserviceaccount.com) granted admin on the Play account; Publisher API used end-to-end: AAB vc2 uploaded, internal-track release 0.1-beta (draft), en-US listing + icon + feature graphic + 2 screenshots committed. Console-side TODOs before internal rollout can complete: content-rating questionnaire, data-safety form, privacy-policy URL (https://ansenio.github.io/md-reader/privacy-policy.html) in App content, target-audience declaration; then flip the draft release to completed.
+
 - Created 2026-09-03 by Hermione from Andrea's Telegram directive: "Approved for v0.1 beta testing. Let's publish it to Google playstore under the name of squadshelf".
