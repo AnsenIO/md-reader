@@ -1,4 +1,4 @@
-package com.mdreader.app;
+package com.squadmdreader.app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

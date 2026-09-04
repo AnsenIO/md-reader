@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.mdreader.app"
+    namespace "com.squadmdreader.app"
     compileSdk rootProject.ext.compileSdkVersion
     // Deterministic for CI (runner images don't ship android-36): platform + build-tools installed explicitly in the workflow.
     buildToolsVersion "35.0.0"
     defaultConfig {
-        applicationId "com.mdreader.app"
+        applicationId "com.squadmdreader.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2

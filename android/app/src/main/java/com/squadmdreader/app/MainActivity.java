@@ -1,4 +1,4 @@
-package com.mdreader.app;
+package com.squadmdreader.app;
 
 import android.util.Log;
 import android.view.View;

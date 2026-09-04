@@ -30,6 +30,6 @@ EOF
 "$JDK/bin/javac" --release 17 -nowarn -cp "$SDK:$CP" -d "$OUT/classes" \
   $(find node_modules/@capacitor/android/capacitor/src/main/java -name "*.java") \
   $(find node_modules/@capacitor/filesystem/android/src/main/java -name "*.java") \
-  android/app/src/main/java/com/mdreader/app/MainActivity.java \
-  android/app/src/main/java/com/mdreader/app/FileOpenPlugin.java "$OUT/stub/com/getcapacitor/android/R.java" 2>&1 | grep -vE "^Note:|uses unchecked|Recompile with" | head -40
+  android/app/src/main/java/com/squadmdreader/app/MainActivity.java \
+  android/app/src/main/java/com/squadmdreader/app/FileOpenPlugin.java "$OUT/stub/com/getcapacitor/android/R.java" 2>&1 | grep -vE "^Note:|uses unchecked|Recompile with" | head -40
 echo "javac exit: ${PIPESTATUS[0]}"
